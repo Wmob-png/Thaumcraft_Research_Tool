@@ -3,6 +3,7 @@
 import pygame
 import ctypes
 import json
+import sys
 from gui import HexBoard
 from resources import resource_path, asset_path
 
@@ -126,6 +127,7 @@ def draw_board_size_menu():
 
 def load_icon(name):
     """
+    Load an icon from assets. Print an error if it fails.
     """
     try:
         path = asset_path(name)
@@ -137,6 +139,7 @@ def load_icon(name):
 
 
 def whiten_surface(surface):
+    """Replace all non-transparent pixels with white, preserving alpha."""
     if not surface:
         return None
     try:
@@ -171,7 +174,7 @@ while waiting:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            exit()
+            sys.exit()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
                 ring_count = 2
@@ -184,7 +187,7 @@ while waiting:
                 waiting = False
             elif event.key == pygame.K_ESCAPE:
                 pygame.quit()
-                exit()
+                sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             for rect, rings in buttons:
@@ -203,7 +206,6 @@ try:
 except Exception:
     pass
 
-# IO and size icons
 IO_CENTER_IMG = load_icon("Ordinamentum.png") or load_icon("Ordostrum.png")
 
 SIZE_IMG_1 = load_icon("hex1.png")
@@ -482,7 +484,7 @@ while running:
                     board.toggle_oi_chaining()
                 elif size_button.collidepoint(mx, my):
                     board.cycle_board_size()
-                    size_flash_frames = 10  # flash on click
+                    size_flash_frames = 10
                 elif clear_button.collidepoint(mx, my):
                     mods = pygame.key.get_mods()
                     if mods & pygame.KMOD_SHIFT:
